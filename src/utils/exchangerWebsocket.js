@@ -1,4 +1,4 @@
-import { socketHostPrice, socketHost } from '../config';
+import { socketHostPrice } from '../config';
 import {
     setLocPriceWebsocketConnection
 } from '../redux/action/exchangerSocket';
@@ -6,127 +6,71 @@ import {
     updateLocAmounts,
     clearLocAmounts
 } from '../redux/action/locAmounts'
-import {setLocEurRate} from '../redux/action/exchangeRates'
 import {
     setSeconds
 } from '../redux/action/locPriceUpdateTimer'
 import store from '../redux/store';
-import Stomp from 'stompjs';
-import {
-    Platform, NativeModules, DeviceEventEmitter
-} from 'react-native'
 
+import { getDate } from './debug'
 
 const WEBSOCKET_RECONNECT_DELAY = 5000;
 const DEFAULT_SOCKET_METHOD = 'getLocPrice';
 const UNSUBSCRIBE_SOCKET_METHOD = 'unsubscribe';
-const topic = "/topic/loc_rate";
-
-const androidStomp = NativeModules.StompModule;
 
 class WS {
     static self;
-    static stompJSClient;
 
     constructor() {
         console.log('@@exchangerWebsocket::constructor');
+        console.log('@@@@@exchangerWebsocket  self', {self});
         
         WS.self = this;
         this.ws = null;
         this.grouping = false;
         this.shoudSocketReconnect = true;
+
         this.initSocket();
         this.locAmounts = [];
+
     }
 
     initSocket() {
-        console.log('@@[WS] exchangerWebsocket::initSocket', socketHostPrice);
+        console.log('@@exchangerWebsocket [WS] initSocket', socketHostPrice);
         
         this.ws = new WebSocket(socketHostPrice);
         this.ws.onmessage = this.handleRecieveMessage;
         this.ws.onopen = this.connect;
         this.ws.onclose = () => { 
-            console.log(`@@[WS] ${require('moment')().format('YYYY-MM-DD hh:mm:ss')} onClone, this`, this);
+            console.log(`@@exchangerWebsocket [WS] onClose ${getDate()}, this`, this);
             this.close(this); 
         };
-
-        this.connectStompJSLockRate();
-    }
-
-    connectStompJSLockRate() {
-        console.log('@@[STOMP] connectStompJSLockRate() -> this', this);
-
-        let client = Stomp.client(socketHost);
-        WS.stompJSClient = client;
-        client.debug = msg => console.info('@@[STOMP] DEBUG', msg);
-
-        const onSubscribe = () => client.subscribe(
-            topic, 
-            (data) => {
-                console.info(`@@@@[STOMP] ${require('moment')().format('YYYY-MM-DD hh:mm:ss')} [EVENT]`, {data,body:data.body});
-                store.dispatch(setLocEurRate(Number(data.body)));
-            }
-        );
-
-        this.stompAndroid();
-    
-        client.connect(
-          null,
-          null,
-          onSubscribe
-        );
-    }
-
-    stompAndroid() {
-        if (Platform.OS === 'android') {
-            DeviceEventEmitter.removeAllListeners("onStompConnect");
-            DeviceEventEmitter.addListener("onStompConnect", () => {
-                console.info(`@@@@[STOMP][ANDROID] ${require('moment')().format('YYYY-MM-DD HH:mm:ss')} Connected`);
-
-            });
-            
-            DeviceEventEmitter.removeAllListeners("onStompError");
-            DeviceEventEmitter.addListener("onStompError", ({type, message}) => {
-                console.info(`@@@@[STOMP][ANDROID] ${require('moment')().format('YYYY-MM-DD HH:mm:ss')} Error`,{type, message});
-            });
-
-            // DeviceEventEmitter.removeAllListeners("onStompMessage");
-            DeviceEventEmitter.addListener("onStompMessage", ({message}) => {
-                //const {message} = body;
-                console.info(`@@@@[STOMP][ANDROID] ${require('moment')().format('YYYY-MM-DD HH:mm:ss')} Message`,{message});
-                store.dispatch(setLocEurRate(Number(message)));
-
-            });
-
-            androidStomp.getData('',topic);
-        }
     }
 
     startGrouping(scehduleTime = 20 * 1000){
-        console.log("LOC PRICE startGrouping")
+        console.log("exchangerWebsocket: LOC PRICE startGrouping")
         this.grouping = true;
         if (this.timerOut !== undefined && this.timerOut !== null) {
             clearTimeout(this.timerOut);
             this.timerOut = null;
         }
-        console.log("LOC PRICE stopGrouping setInterval");
+        console.log("exchangerWebsocket: LOC PRICE stopGrouping setInterval");
         this.timer = setInterval(this.onTick, scehduleTime);
     }
 
     stopGrouping() {
-        console.log("LOC PRICE stopGrouping");
+        console.log("exchangerWebsocket: LOC PRICE stopGrouping");
         const that = this;
         clearInterval(that.timer);
         that.timer = null;
         this.timerOut = setTimeout(()=>{
-            console.log("LOC PRICE stopGrouping timerOut");
+            console.log("exchangerWebsocket: LOC PRICE stopGrouping timerOut");
             that.grouping = false;
             that.timerOut = null;
         }, 10 * 1000);
     }
 
     onTick() {
-        console.log('@@@@[WS] exchangerWebsocket::onTick');
+        console.log('@@@@exchangerWebsocket [WS] exchangerWebsocket::onTick');
         
         let clonedLocAmounts = [...WS.self.locAmounts];
         WS.self.locAmounts = [];
@@ -137,13 +81,13 @@ class WS {
     }
 
     connect() {
-        console.log(`@@[WS] ${require('moment')().format('YYYY-MM-DD hh:mm:ss')} exchangerWebsocket::connect`);
+        console.log(`@@exchangerWebsocket [WS] exchangerWebsocket::connect ${getDate()}`);
         
         store.dispatch(setLocPriceWebsocketConnection(true));
     }
 
     sendMessage(id, method, params, isMarked = false) {
-        console.log(`@@@@[WS] ${require('moment')().format('YYYY-MM-DD hh:mm:ss')} exchangerWebsocket::sendMessage`, id, method, params, this.markedID);
+        console.log(`@@@@exchangerWebsocket [WS] exchangerWebsocket::sendMessage ${getDate()}`, id, method, params, this.markedID);
         if (this.ws.readyState === 1 && id) {
             method = method ? method : DEFAULT_SOCKET_METHOD;
             if (isMarked) {
@@ -161,7 +105,7 @@ class WS {
     }
 
     handleRecieveMessage(event) {
-        console.log(`@@[WS] ${require('moment')().format('YYYY-MM-DD hh:mm:ss')} exchangerWebsocket::handleRecieveMessage`, event);
+        console.log(`@@exchangerWebsocket [WS] exchangerWebsocket::handleRecieveMessage ${getDate()}`, event);
         
         if (event) {
             const data = JSON.parse(event.data);
@@ -180,16 +124,7 @@ class WS {
     }
 
     close() {
-        console.log(`@@exchangerWebsocket::close ${require('moment')().format('YYYY-MM-DD hh:mm:ss')}`);
-        
-        if (Platform.OS === 'android') {
-            DeviceEventEmitter.removeAllListeners("onStompConnect");
-            DeviceEventEmitter.removeAllListeners("onStompError");
-            DeviceEventEmitter.removeAllListeners("onStompMessage");
-
-            androidStomp.close();
-        }
-        
+        console.log(`@@exchangerWebsocket::close ${getDate()}`);
         
         if (this.shoudSocketReconnect) {
             if (store.getState().currency.isLocPriceWebsocketConnected) {
@@ -203,18 +138,12 @@ class WS {
     }
 
     disconnect() {
-        console.log(`@@[WS/STOMP] ${require('moment')().format('YYYY-MM-DD hh:mm:ss')} 1/3 exchangerWebsocket::disconnect`, event);
+        console.log(`@@exchangerWebsocket [WS] 1/3 exchangerWebsocket::disconnect ${getDate()}`, event);
         
         this.shoudSocketReconnect = false;
         if (this.ws) {
-            console.log('@@[WS] 2/3 exchangerWebsocket::close');
+            console.log('@@exchangerWebsocket [WS] 2/3 exchangerWebsocket::close');
             this.ws.close();
-        }
-
-        if (WS.stompJSClient) {
-            console.log('@@[STOMP] 3/3 exchangerWebsocket::disconnect');
-            WS.stompJSClient.disconnect();
-            WS.stompJSClient = null;
         }
     }
 }

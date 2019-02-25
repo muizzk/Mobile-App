@@ -20,9 +20,18 @@ fix1 = ['android/app/src/main/java/com/locktrip/StompModule.java',
           'dev'     => "String _url = \"wss://dev.locktrip.com/socket\";"
         }
 ]
+fix2 = ['src/config.js', 
+        /const IS_STAGING.*/,
+        {
+          'prod'    => "const IS_STAGING = false;",
+          'staging' => "const IS_STAGING = true;",
+          'dev'     => "const IS_STAGING = true;"
+        }
+]
 
 # execute
-fixes = [fix1];
+#fixes = [fix2];
+fixes = []; # DISABLED
 cfg = ARGV[0]
 
 puts("#{ARGV.count}")

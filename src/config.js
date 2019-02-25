@@ -3,6 +3,7 @@ export let imgHost;
 export let basePath;
 export let socketHostPrice;
 export let socketHost;
+export let stompLocrateSocketPath = "/topic/loc_rate";
 export let routerPrefix;
 export let domainPrefix;
 export let PUBLIC_URL;

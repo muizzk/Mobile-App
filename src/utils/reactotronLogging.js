@@ -2,6 +2,8 @@ import Reactotron, {openInEditor,trackGlobalErrors} from 'reactotron-react-nativ
 
 const overWriteConsoleLog = function() {
   console.disableYellowBox = true;
+  const logToElectrotron = false;
+  const filterConsoleLogToWarn = true;
 
   let logOrig = console.log;
   console.log = (...args) => {
@@ -14,12 +16,16 @@ const overWriteConsoleLog = function() {
       if (name.indexOf('@@') > -1) {
         //if (data)
         let str = '';
-        args.map(item => str += `${item ? item.toString() : ''}/${typeof(item)}, `);
+        //args.map(item => str += `${item ? item.toString() : ''}/${typeof(item)}, `);
         // console.tron.log(name, str);
-        try {
-          console.tron.log(name, data);
-        } catch (e) {
-          console.debug(name, data, e);
+        if (logToElectrotron) {
+          try {
+            console.tron.log(name, data);
+          } catch (e) {
+            console.debug(name, data, e);
+          }
+        } else {
+          logOrig(name, ...args);
         }
         //else console.tron.log(name);
       // console.tron.display(
@@ -29,11 +35,11 @@ const overWriteConsoleLog = function() {
       //       value: data
       //     }
       //   );          
-      } else {
+      } else if (filterConsoleLogToWarn) {
         console.warn(name, ...args)
       }
     }
-  }  
+  }
 }
 
 

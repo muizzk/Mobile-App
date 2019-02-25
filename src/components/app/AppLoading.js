@@ -10,9 +10,7 @@ import { bindActionCreators } from 'redux';
 
 import { getCountries } from '../../redux/action/Country'
 import { getCurrencyRates, getLocRate } from '../../redux/action/exchangeRates'
-import { socketHost, ROOMS_XML_CURRENCY } from '../../config';
-
-const androidStomp = NativeModules.StompModule;
+import { ROOMS_XML_CURRENCY } from '../../config';
 
 const styles = StyleSheet.create({
     container: {
@@ -55,7 +53,8 @@ class AppLoading extends Component {
 
         if (Platform.OS === 'ios') {
         } else if (Platform.OS === 'android') {
-            androidStomp.connect(socketHost);
+            //@@@ TEMPORARY - research how it should be
+            // androidStomp.connect(socketHost);
         }
         SplashScreen.close({
             animationType: SplashScreen.animationType.scale,

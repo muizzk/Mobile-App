@@ -8,6 +8,7 @@ import { WebsocketClient } from '../../../utils/exchangerWebsocket';
 import { CurrencyConverter } from '../../../services/utilities/currencyConverter'
 
 import styles from './styles';
+import StompJSLocrate from '../../../utils/StompJSLocrate';
 
 const DEFAULT_CRYPTO_CURRENCY = 'EUR';
 
@@ -39,7 +40,7 @@ class LocRateButton extends Component {
 		this.list = [
 			this.props.navigation.addListener('didFocus', this._didFocus),
 			this.props.navigation.addListener('willBlur', this._willBlur)
-		];
+        ];
 	}
     
     componentWillUnmount() {
@@ -86,13 +87,14 @@ class LocRateButton extends Component {
         return (
             <TouchableWithoutFeedback onPress={this.props.onPress}>
                 <View style={styles.fab}>
-                {
-                    locRate != 0 ? 
-                        (<Text style={styles.fabText}>LOC/{currency} {parseFloat(locRate).toFixed(10)}</Text>)
-                        :
-                        (<Text style={styles.fabText}>LOC/{currency}    </Text>)
-                }
+                    {
+                        locRate != 0 ? 
+                            (<Text style={styles.fabText}>LOC/{currency} {parseFloat(locRate).toFixed(10)}</Text>)
+                            :
+                            (<Text style={styles.fabText}>LOC/{currency}    </Text>)
+                    }
                     
+                    <StompJSLocrate />
                 </View>
             </TouchableWithoutFeedback>
         );

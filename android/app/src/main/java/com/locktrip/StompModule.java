@@ -43,11 +43,13 @@ public class StompModule extends ReactContextBaseJavaModule {
     StompSession _session = null;
     StompSession.Subscription _lastSubscription = null;
 
-    String _url = "wss://staging.locktrip.com/socket";
+    String _url = "";
     String _message = "";
     String _destination = "";
+    String _stateBeforePause = "";
 
     boolean _isOnce = false;
+    boolean _sendMessageOnSubscribe = true;
 
     StompSessionHandler _sessionHandler = new StompSessionHandler() {
         @Override
@@ -96,7 +98,7 @@ public class StompModule extends ReactContextBaseJavaModule {
 
         @Override
         public void handleFrame(StompHeaders headers, Object payload) {
-            Log.e(TAG, payload.toString());
+            Log.e(TAG, "handleFrame: '" + payload.toString() + "'");
             onMessage(payload.toString());
         }
     };
@@ -104,6 +106,7 @@ public class StompModule extends ReactContextBaseJavaModule {
     public StompModule(ReactApplicationContext reactContext) {
         super(reactContext);
         this._reactContext = reactContext;
+        // reactContext.addLifecycleEventListener(this);
     }
 
     @Override
@@ -130,7 +133,7 @@ public class StompModule extends ReactContextBaseJavaModule {
         Log.e(TAG, "connect~~~~  0");
         _client = this.client();
         if (!_client.isRunning() || _session == null || !_session.isConnected()) {
-            Log.e(TAG, "connect~~~~  1");
+            Log.e(TAG, "connect~~~~  1, url: '" + _url + "'");
             try {
                 _client.connect(_url, new WebSocketHttpHeaders(), _stompHeaders, _sessionHandler);
             } catch (IllegalStateException ex) {
@@ -141,6 +144,7 @@ public class StompModule extends ReactContextBaseJavaModule {
     }
 
     private void disconnect() {
+        Log.e(TAG, "disconnect");
         try {
             unSubscription();
             if (_session != null) {
@@ -163,24 +167,57 @@ public class StompModule extends ReactContextBaseJavaModule {
     private void subscription() {
         Log.e(TAG, "subscription");
         if (_session != null && _session.isConnected()) {
-            Log.e(TAG, "subscription1");
+            Log.e(TAG, "subscription1, " +
+                "message: '" + _message + "'"
+                + ", destination: '" + _destination + "'"
+                + ", sendMessageOnSubscribe: '" + _sendMessageOnSubscribe + "'"
+
+            );
+            // Log.e(TAG, _message);
             this.unSubscription();
 
             _lastSubscription = _session.subscribe(_destination, _sessionHandler);
-            _session.send("search", _message);
+            if (this._sendMessageOnSubscribe) {
+                Log.e(TAG, "subscription2, sending " + 
+                    "message: '" + _message + "'"
+                + ", destination: 'search'"
+                );
+                _session.send("search", _message);
+            }
         }
         else {
-            Log.e(TAG, "subscription2");
-            _isOnce = true;
+            Log.e(TAG, "subscription3, else connect");
+            _isOnce = false;
             connect();
         }
     }
+
+    // @Override
+    // public void onHostPause() {
+    //     this._stateBeforePause = this._url;
+    //     this._url = "";
+    //     this.disconnect();
+    // }
+
+
+    // @Override
+    // public void onHostResume() {
+    //     this.connect(this._stateBeforePause,this._destination);
+    // }
+
+    // @Override
+    // public void onHostDestroy() {
+    //     this._url = "";
+    //     this.disconnect();
+    // }
+
 
     private void onConnect() {
         this.emitEventToJS("onStompConnect", null);
     }
 
     private void onError(int type, String message) {
+        Log.e(TAG, "onError, type: '" + type + ", message: '"+ message + "'");
         WritableMap event = Arguments.createMap();
         event.putInt("type", type); // 1: unknown, 2: connection lost, 3: connection failed.
         event.putString("message", message);
@@ -194,11 +231,24 @@ public class StompModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void connect(String url){
+    public void connect(String url, String destination){
+        Log.e(TAG, "Connect (React), url: '" + url + ", destination: '"+ destination + "'");
         this._url = url;
-        _isOnce = false;
+        _isOnce = true;
         // this.connect();
+        this._destination = destination;
         new Thread(this::connect).start();
+    }
+
+    @ReactMethod
+    public void connect(String url, String destination, boolean sendMessageOnSubscribe) {
+        Log.e(TAG, "Connect (React), " +
+            "url: '" + url + "'" + 
+            ", destination: '"+ destination + "'" +
+            ", sendMessageOnSubscribe: '"+ sendMessageOnSubscribe + "'"
+        );
+        this._sendMessageOnSubscribe = sendMessageOnSubscribe;
+        this.connect(url, destination);
     }
 
     @ReactMethod
@@ -208,8 +258,8 @@ public class StompModule extends ReactContextBaseJavaModule {
         this._message = message;
         this._destination = destination;
 
-        Log.e(TAG, message);
-        Log.e(TAG, destination);
+        // Log.e(TAG, message);
+        // Log.e(TAG, destination);
         // this.subscription();
         new Thread(this::subscription).start();
     }
