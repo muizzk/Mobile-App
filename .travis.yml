@@ -1,11 +1,29 @@
 stages:
+  - name: demo
+    if: branch = tools/travis-ci
   - name: build ios
-    # if: branch IN (master, staging)
+    if: branch IN (master, staging)
   - name: build android
-    # if: branch IN (master, staging)
+    if: branch IN (master, staging)
 
 jobs:
   include:
+    - stage: demo
+      env:
+        - app_ios_prod=$(tmp=$MobileApp.app_$TRAVIS_JOB_NUMBER_$TRAVIS_BRANCH_prod.zip && tmp=${tmp//\//-} && echo $tmp)
+        - app_ios_staging=$(tmp=$MobileApp.app_$TRAVIS_JOB_NUMBER_$TRAVIS_BRANCH_staging.zip && tmp=${tmp//\//-} && echo $tmp)
+        - dir1=$(tmp=$var3/$TRAVIS_BUILD_NUMBER/$TRAVIS_BRANCH && tmp=${tmp//\//-} && echo $tmp)
+        - dir2=$dir1/logs_ios
+        - core_sim_log=$HOME/Library/Logs/CoreSimulator/CoreSimulator.log
+        - msg=$(echo .git/COMMIT_EDITMSG)
+      script:
+        - echo $app_ios_prod
+        - echo $dir1
+        - echo $dir2
+        - echo $log_file
+        - echo $anrdoid_apk
+        - echo $anrdoid_out
+
     - stage: build ios
       os: osx
       osx_image: xcode9.3
