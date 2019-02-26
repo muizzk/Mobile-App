@@ -27,7 +27,6 @@ changes = [select_config]; # DISABLED
 cfg = ARGV[0]
 
 puts("\n")
-puts ("Index: #{configs.index(cfg)}, cfg: #{cfg}")
 if configs.index(cfg) != nil && ARGV.count == 1 && ['help','--help','/h','-h'].index(cfg) == nil
   puts("Selecting config: #{cfg}\n")
   puts("Executing #{changes.count} chang#{changes.count == 1 ? 'e' : 'es'}:")
@@ -44,6 +43,10 @@ if configs.index(cfg) != nil && ARGV.count == 1 && ['help','--help','/h','-h'].i
     replace_line_in_file(file, regexp, repl)
   end
 else
-  puts("Usage: #{File.basename($0)} <#{configs.join('|')}>")
+  cmd = $0 #File.basename($0)
+  puts("Usage:\n\t#{cmd} <#{configs.join('|')}>")
+  puts("Examples:")
+  puts("\t#{cmd} staging")
+  puts("\t#{cmd} prod")
 end
 puts("\nDone.\n\n")
