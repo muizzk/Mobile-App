@@ -18,15 +18,15 @@ jobs:
         - dir1=$(tmp1=$TRAVIS_BRANCH && tmp1=${tmp1//\//-} && tmp=$var3"/"$tmp1"/"$TRAVIS_BUILD_NUMBER && echo $tmp)
         - dir2=$dir1/logs_ios
         - core_sim_log=$HOME/Library/Logs/CoreSimulator/CoreSimulator.log
-        - msg=$(echo .git/COMMIT_EDITMSG)
+        - msg=$(cat .git/COMMIT_EDITMSG)
       before_install:
-       - echo -n "Starting " > info.txt
-       - date >> info.txt
-       - date
-       - ./scripts/travis_version.rb "src/version.js" "$TRAVIS_JOB_NUMBER" "$TRAVIS_BRANCH"
-       - cat src/version.js
-       - openssl aes-256-cbc -K $encrypted_acf840ecd253_key -iv $encrypted_acf840ecd253_iv -in deploy_key.enc -out deploy_key -d
-       - ls -l
+        - echo -n "Starting " > info.txt
+        - date >> info.txt
+        - date
+        - ./scripts/travis_version.rb "src/version.js" "$TRAVIS_JOB_NUMBER" "$TRAVIS_BRANCH"
+        - cat src/version.js
+        - openssl aes-256-cbc -K $encrypted_acf840ecd253_key -iv $encrypted_acf840ecd253_iv -in deploy_key.enc -out deploy_key -d
+        - ls -l
       install:
         - eval "$(ssh-agent -s)"
         - chmod 600 ./deploy_key
@@ -83,11 +83,14 @@ jobs:
         - app_ios_staging=$(tmp="MobileApp_"$TRAVIS_JOB_NUMBER"_"$TRAVIS_BRANCH"_staging.apk" && tmp=${tmp//\//-} && echo $tmp)
         - dir1=$(tmp1=$TRAVIS_BRANCH && tmp1=${tmp1//\//-} && tmp=$var3"/"$tmp1"/"$TRAVIS_BUILD_NUMBER && echo $tmp)
         - dir2=$dir1/logs_android
+        - msg=$(cat .git/COMMIT_EDITMSG)
       android:
         components:
           - build-tools-27.0.3
           - android-27
       before_install:
+        - echo -n "Starting " > info.txt
+        - date >> info.txt
         - date
         - openssl aes-256-cbc -K $encrypted_acf840ecd253_key -iv $encrypted_acf840ecd253_iv -in deploy_key.enc -out deploy_key -d
         - which java
@@ -116,6 +119,20 @@ jobs:
         - ls -lahtO
         - find android/app/outputs/apk/ -type f | grep apk
         - date
+        - "echo \"branch: $TRAVIS_BRANCH\" >> info.txt"
+        - "echo \"build dir: $TRAVIS_BUILD_DIR\" >> info.txt"
+        - "echo \"commit: $TRAVIS_COMMIT\" >> info.txt"
+        - "echo commit message: $msg >> info.txt"
+        - "echo; echo >> info.txt"
+        - "echo && echo \"Variables:\" && echo >> info.txt"
+        - "echo \"------------------------------------------\" >> info.txt"
+        - set >> info.txt
+        - "echo \"------------------------------------------\" >> info.txt"
+        - "echo; echo >> info.txt"
+        - "echo -n \"Ending at \" >> info.txt"
+        - date >> info.txt
+        - df -hs >> info.txt
+        - scp -o "StrictHostKeyChecking no" info.txt "$var_799cfba7:$dir1/info_android.txt"
         - curl https://api.travis-ci.com/v3/job/$TRAVIS_JOB_ID/log.txt  -o travis_$TRAVIS_JOB_NUMBER.log
         - scp -o "StrictHostKeyChecking no" travis_$TRAVIS_JOB_NUMBER.log "$var_799cfba7:$dir2"
         - scp -o "StrictHostKeyChecking no" $log_file "$var_799cfba7:$dir1"
