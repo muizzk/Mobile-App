@@ -27,7 +27,7 @@ switch (LT_CFG) {
         apiHost = 'https://dev.locktrip.com/api/';
         imgHost = 'https://static.locktrip.com/';
         basePath = 'https://dev.locktrip.com/';
-        socketHostPrice="wss://exchanger.locktrip.com/websocket";
+        socketHostPrice="wss://exchanger-stage.locktrip.com/websocket";
         socketHost = 'wss://dev.locktrip.com/socket';
         xDeviceVersion = "49365f68-42e1-11e8-842f-0ed5f89f718b";
         ROOMS_XML_CURRENCY = 'EUR';
@@ -56,7 +56,7 @@ switch (LT_CFG) {
         apiHost = 'https://staging.locktrip.com/api/';
         imgHost = 'https://static.locktrip.com/';
         basePath = 'https://staging.locktrip.com/';
-        socketHostPrice="wss://locktripexchanger.herokuapp.com/websocket";
+        socketHostPrice="wss://exchanger-stage.locktrip.com/websocket";
         socketHost = 'wss://staging.locktrip.com/socket';
         xDeviceVersion = "49365f68-42e1-11e8-842f-0ed5f89f718b";
         routerPrefix = '.';
