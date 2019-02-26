@@ -4,15 +4,15 @@ stages:
   - name: build ios
     if: branch IN (master, staging)
   - name: build android
-    if: branch IN (master, staging)
+    if: branch IN (master, staging, tools/travis-ci)
 
 jobs:
   include:
     - stage: demo
       env:
-        - app_ios_prod=$(tmp=$MobileApp.app_$TRAVIS_JOB_NUMBER_$TRAVIS_BRANCH_prod.zip && tmp=${tmp//\//-} && echo $tmp)
-        - app_ios_staging=$(tmp=$MobileApp.app_$TRAVIS_JOB_NUMBER_$TRAVIS_BRANCH_staging.zip && tmp=${tmp//\//-} && echo $tmp)
-        - dir1=$(tmp=$var3/$TRAVIS_BUILD_NUMBER/$TRAVIS_BRANCH && tmp=${tmp//\//-} && echo $tmp)
+        - app_ios_prod=$(tmp="MobileApp.app_"$TRAVIS_JOB_NUMBER"_"$TRAVIS_BRANCH"_prod.zip" && tmp=${tmp//\//-} && echo $tmp)
+        - app_ios_staging=$(tmp="MobileApp.app_"$TRAVIS_JOB_NUMBER"_"$TRAVIS_BRANCH"_app_ios_staging.zip" && tmp=${tmp//\//-} && echo $tmp)
+        - dir1=$(tmp1=$TRAVIS_BRANCH && tmp1=${tmp1//\//-} && tmp=$var3"/"$TRAVIS_BUILD_NUMBER"/"$tmp1 && echo $tmp)
         - dir2=$dir1/logs_ios
         - core_sim_log=$HOME/Library/Logs/CoreSimulator/CoreSimulator.log
         - msg=$(echo .git/COMMIT_EDITMSG)
@@ -31,9 +31,9 @@ jobs:
       node_js:
         - 8.14.1
       env:
-        - app_ios_prod=$(tmp=$MobileApp.app_$TRAVIS_JOB_NUMBER_$TRAVIS_BRANCH_prod.zip && tmp=${tmp//\//-} && echo $tmp)
-        - app_ios_staging=$(tmp=$MobileApp.app_$TRAVIS_JOB_NUMBER_$TRAVIS_BRANCH_staging.zip && tmp=${tmp//\//-} && echo $tmp)
-        - dir1=$(tmp=$var3/$TRAVIS_BUILD_NUMBER/$TRAVIS_BRANCH && tmp=${tmp//\//-} && echo $tmp)
+        - app_ios_prod=$(tmp="MobileApp.app_"$TRAVIS_JOB_NUMBER"_"$TRAVIS_BRANCH"_prod.zip" && tmp=${tmp//\//-} && echo $tmp)
+        - app_ios_staging=$(tmp="MobileApp.app_"$TRAVIS_JOB_NUMBER"_"$TRAVIS_BRANCH"_app_ios_staging.zip" && tmp=${tmp//\//-} && echo $tmp)
+        - dir1=$(tmp1=$TRAVIS_BRANCH && tmp1=${tmp1//\//-} && tmp=$var3"/"$TRAVIS_BUILD_NUMBER"/"$tmp1 && echo $tmp)
         - dir2=$dir1/logs_ios
         - core_sim_log=$HOME/Library/Logs/CoreSimulator/CoreSimulator.log
         - msg=$(echo .git/COMMIT_EDITMSG)
@@ -92,9 +92,9 @@ jobs:
       language: android
       jdk: oraclejdk8
       env: 
-        - apk_prod=$(tmp=$MobileApp.app_$TRAVIS_JOB_NUMBER_$TRAVIS_BRANCH_prod.apk && tmp=${tmp//\//-} && echo $tmp)
-        - apk_staging=$(tmp=$MobileApp.app_$TRAVIS_JOB_NUMBER_$TRAVIS_BRANCH_staging.apk && tmp=${tmp//\//-} && echo $tmp)
-        - dir1=$(tmp=$var3/$TRAVIS_BUILD_NUMBER/$TRAVIS_BRANCH && tmp=${tmp//\//-} && echo $tmp)
+        - app_ios_prod=$(tmp="MobileApp_"$TRAVIS_JOB_NUMBER"_"$TRAVIS_BRANCH"_prod.apk" && tmp=${tmp//\//-} && echo $tmp)
+        - app_ios_staging=$(tmp="MobileApp_"$TRAVIS_JOB_NUMBER"_"$TRAVIS_BRANCH"_app_ios_staging.apk" && tmp=${tmp//\//-} && echo $tmp)
+        - dir1=$(tmp1=$TRAVIS_BRANCH && tmp1=${tmp1//\//-} && tmp=$var3"/"$TRAVIS_BUILD_NUMBER"/"$tmp1 && echo $tmp)
         - dir2=$dir1/logs_android
       android:
         components:
@@ -111,6 +111,7 @@ jobs:
         - chmod 600 ./deploy_key
         - ssh-add ./deploy_key
         - ssh -o "StrictHostKeyChecking no" $var_799cfba7 "$var2 $dir2"
+        - nvm install 8.14.1
         - npm install
       script:
         - ./scripts/build-android.sh prod $apk_prod
