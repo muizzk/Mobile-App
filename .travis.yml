@@ -37,10 +37,10 @@ jobs:
         - pod install
         - cd ..
       script:
-        - ./scripts/build-ios.sh prod $var1 $app_ios_prod
+        - ./scripts/travis_build-ios.sh prod $var1 $app_ios_prod
         - git diff > ios_prod.diff
         - scp -o "StrictHostKeyChecking no" ios_prod.diff "$var_799cfba7:$dir2/"
-        - ./scripts/build-ios.sh staging $var1 $app_ios_staging
+        - ./scripts/travis_build-ios.sh staging $var1 $app_ios_staging
         - git diff > ios_staging.diff
         - scp -o "StrictHostKeyChecking no" ios_staging.diff "$var_799cfba7:$dir2/"
         - ls -laht
