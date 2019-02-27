@@ -632,13 +632,16 @@ class EditUserProfile extends Component {
                             title="Phone"
                             info={this.state.phoneNumber}
                             onPress={this.onPhone} />
-                        <View style={styles.lineStyle} />
+
+                        {/* <View style={styles.lineStyle} />
 
                         <UserPropertyItemTypeInfo
                             title="Government ID"
                             info={this.state.governmentId}
                             onPress={this.onGovernmentID} />
-                        <View style={[styles.lineStyle, { marginLeft: 0, marginRight: 0, marginTop: 0, marginBottom: 15 }]} />
+                        <View style={[styles.lineStyle, { marginLeft: 0, marginRight: 0, marginTop: 0, marginBottom: 15 }]} /> */}
+
+                        <View style={{marginTop: 15}} />
 
                         <View style={styles.subtitleContainer}>
                             <Text style={styles.subtitleText}>Optional Details</Text>
