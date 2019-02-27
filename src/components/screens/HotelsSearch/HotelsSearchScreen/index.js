@@ -111,6 +111,8 @@ class HotelsSearchScreen extends Component {
         }
 
         this.saveState();
+
+        this.handleReceiveSingleHotel = this.handleReceiveSingleHotel.bind(this);
     }
 
     componentWillMount() {
@@ -885,9 +887,12 @@ class HotelsSearchScreen extends Component {
                 }
             }
         } else {
-            this.setState(prevState => ({
-                listingsMap: [...prevState.listingsMap, response]
-            }));
+            this.setState(prevState => {
+                debugger;
+                return {
+                    hotelsInfo: [...prevState.hotelsInfo, response]
+                }
+            });
         }
     }
 }

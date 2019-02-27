@@ -1,6 +1,12 @@
 class CurrencyConverter {
     static convert(exchangeRates, from, to, quantity) {
-        return quantity * exchangeRates[from][to];
+        try {
+            return quantity * exchangeRates[from][to];
+        } catch(e) {
+            //debugger;
+            //@@@@
+            return -1;
+        }
     }
 }
 

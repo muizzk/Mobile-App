@@ -18,6 +18,8 @@ import LocPrice from '../../atoms/LocPrice'
 
 import styles from './styles';
 
+//@@@
+const isDebug = false;
 class HotelItemView extends Component {
     static propTypes = {
         item: PropTypes.object | PropTypes.array,
@@ -34,12 +36,16 @@ class HotelItemView extends Component {
 
     constructor(props) {
         super(props);
+
+        this.renderPrice = this.renderPrice.bind(this);
     }
 
     onFlatClick = (item) => {
-        if (item.price != undefined && item.price != null) {
+        debugger;
+        //@@@@
+        // if (item.price != null) {
             this.props.gotoHotelDetailsPage(item);
-        }
+        // }
     }
 
     renderStars = (count) => {
@@ -71,6 +77,35 @@ class HotelItemView extends Component {
     //     }
     // }
 
+    renderPrice(isDoneSocket, isLoadingPricing, price, currencySign, itemPrice) {
+        return (
+            isLoadingPricing
+                ?
+                    <View style={styles.costView}>
+                        {
+                            isDoneSocket ?
+                            <Text style={styles.cost} numberOfLines={1} ellipsizeMode="tail">Unavailable</Text>
+                            :
+                            <Text style={{
+                                fontFamily:'Verdana',
+                                fontSize: 10,
+                                color:"#999",
+                                shadowColor: 'black', 
+                                shadowOffset: {width: 5,height: 5}
+                            }}>Loading price...</Text>
+                        }
+                            {/* <Image style={{width:35, height:35}} source={require('../../../assets/loader.gif')}/> */}
+                    </View>
+                :
+                    <View style={styles.costView}>
+                        <Text style={styles.cost} numberOfLines={1} ellipsizeMode="tail">{currencySign}{parseFloat(price).toFixed(2)}</Text>
+                        {/* <Text style={styles.costLoc} numberOfLines={1} ellipsizeMode="tail"> (LOC {parseFloat(price/locRate).toFixed(2)}) </Text> */}
+                        <LocPrice style= {styles.costLoc} fiat={price / this.props.daysDifference} fromParentType={0}/>
+                        <Text style={styles.perNight}>per night</Text>
+                    </View>
+        )
+    }
+
     render() {
         const {
             item, currencySign, isDoneSocket, exchangeRates, currency
@@ -82,13 +117,29 @@ class HotelItemView extends Component {
                  "";
         let stars = item.star;
         let isLoadingPricing = true;
+        let price; 
+        let itemPrice; 
 
-        if (item.price != undefined && item.price != null) {
+        if (item && item.price != null) {
             isLoadingPricing = false;
+            itemPrice = item.price;
+            let tmpPrice = CurrencyConverter.convert(
+                exchangeRates.currencyExchangeRates,
+                RoomsXMLCurrency.get(), 
+                currency, 
+                item.price);
+            price = exchangeRates.currencyExchangeRates && (tmpPrice / this.props.daysDifference).toFixed(2);
         }
 
-        let price = exchangeRates.currencyExchangeRates && ((CurrencyConverter.convert(exchangeRates.currencyExchangeRates, RoomsXMLCurrency.get(), currency, item.price)) / this.props.daysDifference).toFixed(2);
-      
+        //
+        if (isDebug){
+            price = 1000.8
+            itemPrice = 10;
+            isLoadingPricing = false;
+            var isDoneSocket2 = true;
+        }
+
+  
         return (
             <TouchableOpacity onPress={() => this.onFlatClick(item)}>
                 <CardView 
@@ -111,6 +162,7 @@ class HotelItemView extends Component {
                         <TouchableOpacity style={styles.favoritesButton}>
                             <Image source={require('../../../assets/png/heart.png')} style={styles.favoriteIcon} resizeMode='contain'/>
                         </TouchableOpacity>
+                        {/* isDebug ? <Text>DEBUG MODE</Text> : null @@@@@ */}
                     </View>
 
 
@@ -127,24 +179,7 @@ class HotelItemView extends Component {
                             {/* <Text style={styles.totalReviews}> 73 Reviews </Text> */}
                         </View>
 
-                        {
-                        !isLoadingPricing?
-                            <View style={styles.costView}>
-                                <Text style={styles.cost} numberOfLines={1} ellipsizeMode="tail">{currencySign}{parseFloat(price).toFixed(2)}</Text>
-                                {/* <Text style={styles.costLoc} numberOfLines={1} ellipsizeMode="tail"> (LOC {parseFloat(price/locRate).toFixed(2)}) </Text> */}
-                                <LocPrice style= {styles.costLoc} fiat={item.price / this.props.daysDifference} fromParentType={0}/>
-                                <Text style={styles.perNight}>per night</Text>
-                            </View>
-                        :
-                            <View style={styles.costView}>
-                                {
-                                    isDoneSocket ?
-                                    <Text style={styles.cost} numberOfLines={1} ellipsizeMode="tail">Unavailable</Text>
-                                    :
-                                    <Image style={{width:35, height:35}} source={require('../../../assets/loader.gif')}/>
-                                }
-                            </View>
-                        }
+                        { this.renderPrice      (isDebug ? isDoneSocket2 : isDoneSocket, isLoadingPricing, price, currencySign, itemPrice) }
                     </View>
                 </CardView>
             </TouchableOpacity>
