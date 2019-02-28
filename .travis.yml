@@ -75,7 +75,7 @@ jobs:
 
     - stage: build android
       os: linux
-      dist: xenial
+      dist: trusty
       language: android
       jdk: oraclejdk8
       env: 
