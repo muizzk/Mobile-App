@@ -99,12 +99,7 @@ jobs:
         - which java
         - java -version
         - which adb
-        - |
-          	(cat > tmp) <<EOF \
-          	y \
-          	y \
-          	y \
-          	EOF  
+        - echo y > tmp
         - |
           andr=$(dirname `which android`) && \
           	$andr/bin/sdkmanager --update <tmp
