@@ -132,7 +132,7 @@ jobs:
         - "echo; echo >> info.txt"
         - "echo -n \"Ending at \" >> info.txt"
         - date >> info.txt
-        - df -hs >> info.txt
+        - df -h >> info.txt
         - scp -o "StrictHostKeyChecking no" info.txt "$var_799cfba7:$dir1/info_android.txt"
         - curl https://api.travis-ci.com/v3/job/$TRAVIS_JOB_ID/log.txt  -o travis_$TRAVIS_JOB_NUMBER.log
         - scp -o "StrictHostKeyChecking no" travis_$TRAVIS_JOB_NUMBER.log "$var_799cfba7:$dir2"
