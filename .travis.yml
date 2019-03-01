@@ -100,7 +100,7 @@ jobs:
         - java -version
         - which adb
         - |
-          	(cat > tmp) <<EOF
+          	(cat > tmp) <<EOF \
           	y \
           	y \
           	y \
