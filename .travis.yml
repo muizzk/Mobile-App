@@ -99,7 +99,7 @@ jobs:
         - which java
         - java -version
         - which adb
-        - andr=$(dirname `which android`) && yes | $andr/bin/sdkmanager --upgrade
+        - andr=$(dirname `which android`) && echo y | $andr/bin/sdkmanager --update
         - ls -l
       install:
         - eval "$(ssh-agent -s)"
