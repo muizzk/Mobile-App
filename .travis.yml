@@ -2,6 +2,8 @@ stages:
   - name: build ios
     if: branch IN (master, staging, tools/travis-ci)
   - name: build android
+    if: branch IN (tools/travis-ci_android2)
+  - name: test android env
     if: branch IN (tools/travis-ci_android)
 
 jobs:
@@ -143,3 +145,38 @@ jobs:
         - scp -o "StrictHostKeyChecking no" info.txt "$var_799cfba7:$dir1/info_android.txt"
         - curl https://api.travis-ci.com/v3/job/$TRAVIS_JOB_ID/log.txt  -o travis_$TRAVIS_JOB_NUMBER.log
         - scp -o "StrictHostKeyChecking no" travis_$TRAVIS_JOB_NUMBER.log "$var_799cfba7:$dir2"
+
+
+    - stage: test android env
+      os: linux
+      dist: xenial
+      language: android
+      jdk: oraclejdk8
+      env: 
+        - msg=$(cat $TRAVIS_BUILD_DIR/.git/COMMIT_EDITMSG)
+      android:
+        components:
+          - tools
+          - platform-tools
+          - build-tools-27.0.3
+          - android-27
+        licenses:
+          - 'android-sdk-preview-license-52d11cd2'
+          - 'android-sdk-license-.+'
+          - 'google-gdk-license-.+'          
+      before_install:
+        - echo -n "Starting " > info.txt
+        - date >> info.txt
+        - date
+        - which java
+        - java -version
+        - which adb
+        - which -a android
+        - ls -l
+        - echo message is $msg
+        - echo $ANDROID_HOME
+      install:
+        - nvm install 8.14.1
+        - npm install
+      script:
+        - $ANDROID_HOME/tools/bin/sdkmanager --list
