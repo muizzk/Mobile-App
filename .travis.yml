@@ -86,7 +86,9 @@ jobs:
         - msg=$(cat .git/COMMIT_EDITMSG)
       android:
         components:
-          - build-tools-27.0.3
+          - tools
+          - tools
+          - platform-tools
           - build-tools-27.0.3
           - android-27
       before_install:
