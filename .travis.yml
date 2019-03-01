@@ -87,14 +87,13 @@ jobs:
       android:
         components:
           - tools
-          - tools
-          - tools
-          - tools
-          - tools
-          - tools
           - platform-tools
           - build-tools-27.0.3
           - android-27
+        licenses:
+          - 'android-sdk-preview-license-52d11cd2'
+          - 'android-sdk-license-.+'
+          - 'google-gdk-license-.+'          
       before_install:
         - echo -n "Starting " > info.txt
         - date >> info.txt
