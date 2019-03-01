@@ -75,7 +75,7 @@ jobs:
 
     - stage: build android
       os: linux
-      dist: trusty
+      dist: xenial
       language: android
       jdk: oraclejdk8
       env: 
@@ -98,6 +98,8 @@ jobs:
         - openssl aes-256-cbc -K $encrypted_acf840ecd253_key -iv $encrypted_acf840ecd253_iv -in deploy_key.enc -out deploy_key -d
         - which java
         - java -version
+        - which adb
+        - andr=$(dirname `which android`) && $andr/bin/sdkmanager --licenses
         - ls -l
       install:
         - eval "$(ssh-agent -s)"
