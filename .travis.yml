@@ -87,6 +87,11 @@ jobs:
       android:
         components:
           - tools
+          - tools
+          - tools
+          - tools
+          - tools
+          - tools
           - platform-tools
           - build-tools-27.0.3
           - android-27
@@ -99,10 +104,6 @@ jobs:
         - java -version
         - which adb
         - which -a android
-        - echo y > tmp
-        - |
-          andr=$(dirname `which android`) && \
-          	$andr/bin/sdkmanager --update < tmp
         - ls -l
       install:
         - eval "$(ssh-agent -s)"
