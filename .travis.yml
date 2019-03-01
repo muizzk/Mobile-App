@@ -99,7 +99,15 @@ jobs:
         - which java
         - java -version
         - which adb
-        - andr=$(dirname `which android`) && (while sleep 1; do echo "y"; done) | $andr/bin/sdkmanager --update
+        - |
+          	(cat > tmp) <<EOF
+          	y \
+          	y \
+          	y \
+          	EOF  
+        - |
+          andr=$(dirname `which android`) && \
+          	$andr/bin/sdkmanager --update <tmp
         - ls -l
       install:
         - eval "$(ssh-agent -s)"
