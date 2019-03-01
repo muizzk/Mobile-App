@@ -102,7 +102,7 @@ jobs:
         - echo y > tmp
         - |
           andr=$(dirname `which android`) && \
-          	($andr/bin/sdkmanager --update < while sleep 1; echo y; done)
+          	$andr/bin/sdkmanager --update < while sleep 1; echo y; done
         - ls -l
       install:
         - eval "$(ssh-agent -s)"
