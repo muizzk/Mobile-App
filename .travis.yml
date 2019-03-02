@@ -177,6 +177,7 @@ jobs:
         - find $ANDROID_HOME | grep sdkmanager
         - yes | android update sdk --no-ui
       install:
+        - echo y | sdkmanager "ndk-bundle"
         - nvm install 8.14.1
         - npm install
       script:
