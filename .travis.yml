@@ -170,8 +170,7 @@ jobs:
         - java -version
         - which adb
         - which -a android
-        - ls -l
-        - msg=$(cat .git/COMMIT_EDITMSG)
+        - ls -lhat
         - echo message is $msg
         - echo $ANDROID_HOME
         - android list sdk --extended
