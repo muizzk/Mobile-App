@@ -175,8 +175,9 @@ jobs:
         - ls -l
         - echo message is $msg
         - echo $ANDROID_HOME
+        - find $ANDROID_HOME
       install:
         - nvm install 8.14.1
         - npm install
       script:
-        - $ANDROID_HOME/tools/bin/sdkmanager --list
+        - ./scripts/travis_build-android.sh prod $apk_prod
