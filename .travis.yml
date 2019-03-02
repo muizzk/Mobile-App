@@ -175,6 +175,7 @@ jobs:
         - ls -l
         - echo message is $msg
         - echo $ANDROID_HOME
+        - cat /usr/local/android-sdk/licenses
       install:
         - nvm install 8.14.1
         - npm install
