@@ -161,6 +161,8 @@ jobs:
           - platform-tools
           - build-tools-27.0.3
           - android-27
+      licenses:
+        - '.+'
       before_install:
         - echo -n "Starting " > info.txt
         - date >> info.txt
@@ -174,7 +176,7 @@ jobs:
         - echo $ANDROID_HOME
         - android list sdk --extended
         - find $ANDROID_HOME | grep sdkmanager
-        - yes | android update sdk --no-ui
+        #- yes | android update sdk --no-ui
         # from an old github issue, 2016: https://github.com/travis-ci/travis-ci/issues/5395
         - export TERM=dumb
             # Approx. 3 seconds
