@@ -154,14 +154,13 @@ jobs:
       jdk: oraclejdk8
       android:
         components:
+      android:
+        components:
+          - tools
           - tools
           - platform-tools
           - build-tools-27.0.3
           - android-27
-        licenses:
-          - 'android-sdk-preview-license-52d11cd2'
-          - 'android-sdk-license-.+'
-          - 'google-gdk-license-.+'          
       before_install:
         - echo -n "Starting " > info.txt
         - date >> info.txt
@@ -176,8 +175,20 @@ jobs:
         - android list sdk --extended
         - find $ANDROID_HOME | grep sdkmanager
         - yes | android update sdk --no-ui
+        # from an old github issue, 2016: https://github.com/travis-ci/travis-ci/issues/5395
+        - export TERM=dumb
+            # Approx. 3 seconds
+        - curl -L http://dl.google.com/android/ndk/android-ndk-r10e-linux-x86_64.bin -O
+        - chmod u+x android-ndk-r10e-linux-x86_64.bin
+            # Usually around 1 minute 
+        - ./android-ndk-r10e-linux-x86_64.bin > /dev/null
+        - rm android-ndk-r10e-linux-x86_64.bin
+        - export ANDROID_NDK_HOME=`pwd`/android-ndk-r10e
+        - export LOCAL_ANDROID_NDK_HOME="$ANDROID_NDK_HOME"
+        - export LOCAL_ANDROID_NDK_HOST_PLATFORM="linux-x86_64"
+        - export PATH=$PATH:${ANDROID_NDK_HOME}
+        - env        
       install:
-        - yes | sdkmanager "ndk-bundle"
         - nvm install 8.14.1
         - npm install
       script:
