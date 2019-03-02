@@ -170,12 +170,12 @@ jobs:
         - java -version
         - which adb
         - which -a android
-        - ls -lhat
+        - ls -lhat .git
         - echo message is $msg
         - echo $ANDROID_HOME
         - android list sdk --extended
         - find $ANDROID_HOME | grep sdkmanager
-        - echo y | android update sdk --no-ui
+        - yes | android update sdk --no-ui
       install:
         - nvm install 8.14.1
         - npm install
