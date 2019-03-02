@@ -176,7 +176,7 @@ jobs:
         - echo message is $msg
         - echo $ANDROID_HOME
         - android list sdk --extended
-        - $ANDROID_HOME/tools/bin/sdkmanager --list
+        - find $ANDROID_HOME | grep sdkmanager
       install:
         - nvm install 8.14.1
         - npm install
