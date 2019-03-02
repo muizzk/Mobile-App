@@ -153,7 +153,7 @@ jobs:
       language: android
       jdk: oraclejdk8
       env: 
-        - msg=$(cat $TRAVIS_BUILD_DIR/.git/COMMIT_EDITMSG)
+        - msg=$(cat .git/COMMIT_EDITMSG)
       android:
         components:
           - tools
@@ -175,7 +175,8 @@ jobs:
         - ls -l
         - echo message is $msg
         - echo $ANDROID_HOME
-        - cat /usr/local/android-sdk/licenses
+        - android list sdk --extended
+        - $ANDROID_HOME/tools/bin/sdkmanager --list
       install:
         - nvm install 8.14.1
         - npm install
