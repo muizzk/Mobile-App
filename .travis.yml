@@ -175,7 +175,6 @@ jobs:
         - ls -l
         - echo message is $msg
         - echo $ANDROID_HOME
-        - find $ANDROID_HOME
       install:
         - nvm install 8.14.1
         - npm install
