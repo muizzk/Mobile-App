@@ -4,7 +4,9 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         flexDirection: 'column',
-        alignItems: 'stretch',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        width:'100%',
         backgroundColor: '#f0f1f3'
     },
     searchAreaView: {
@@ -15,11 +17,41 @@ const styles = StyleSheet.create({
         paddingLeft: 17,
         paddingRight: 17
     },
+    content: {
+        flex: 0.87,
+        flexDirection: 'column',
+        width: "100%"
+    },
     webView: {
         marginTop: 10
     },
     itemView:{
         height: '77%'
+    },
+    topBarButtonContainer: {
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        alignSelf: 'flex-end',
+        paddingHorizontal: 20,
+        paddingBottom: 5,
+
+        // width: 100,
+        // height: 70,
+        // backgroundColor: 'yellow'
+    },
+    topBar: {
+        flex: 0.13,
+        flexDirection: 'row',
+        backgroundColor: '#DDD',
+        justifyContent: 'space-between',        
+        width:'100%',
+    },
+    buttonText: {
+        // marginLeft: 5,
+        // marginTop: 28,
+        fontFamily: 'FuturaStd-Medium',
+        paddingTop: 5
     },
     sectionView: {
         width: '100%',
@@ -308,11 +340,6 @@ const styles = StyleSheet.create({
         marginLeft: 15,
         flexDirection: 'row',
         alignItems: 'center',
-    },
-    btn_backText: {
-        marginLeft: 5,
-        marginTop: 28,
-        fontFamily: 'FuturaStd-Medium',
     },
     btn_backImage:{
         height: 24,

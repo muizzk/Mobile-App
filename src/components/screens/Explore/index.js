@@ -336,7 +336,8 @@ class Explore extends Component {
                     checkInDateFormated: this.state.checkInDateFormated,
                     roomsDummyData: this.state.roomsDummyData,//encodeURI(JSON.stringify(this.state.roomsData)),
                     email: this.state.email,
-                    token: this.state.token
+                    token: this.state.token,
+                    search: this.state.search
                 });
             }
         }
