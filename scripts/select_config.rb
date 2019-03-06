@@ -21,25 +21,56 @@ select_config = ['src/config.js',
           'local'   => "const LT_CFG = LT_LOCAL;",
         }
 ]
-
+native_cfg = ['src/version.js', 
+        /const exploreIsNative.*/,
+        'native'   => "const exploreIsNative = true;",
+        'web'      => "const exploreIsNative = false;",
+        'webview'  => "const exploreIsNative = false;",
+        'web-view' => "const exploreIsNative = false;",
+        'wview'    => "const exploreIsNative = false;"
+]
 # execute
 changes = [select_config]; # DISABLED
 cfg = ARGV[0]
+if ARGV.count > 1 then
+  changes.push({
+    "item" => native_cfg,
+    "id" => ARGV[1]
+  })
+end
+
+# changes.each do |item|
+#   puts('----> item')
+#   puts(item)
+# end
+# exit()
 
 puts("\n")
-if configs.index(cfg) != nil && ARGV.count == 1 && ['help','--help','/h','-h'].index(cfg) == nil
+if (
+  configs.index(cfg) != nil \
+    && ([1,2].index(ARGV.count) > -1) \
+    && ['help','--help','/h','-h'].index(cfg) == nil
+)
   puts("Selecting config: #{cfg}\n")
   puts("Executing #{changes.count} chang#{changes.count == 1 ? 'e' : 'es'}:")
   i=0
-  changes.each do |item|
+  changes.each do |itemObject|
+    if itemObject.class.to_s == "Array"
+      item = itemObject
+      id = cfg
+    else
+      puts(itemObject)
+      item = itemObject["item"]
+      id = itemObject["id"]
+    end
     file = item[0]
     regexp = item[1]
-    repl = item[2][cfg]
+    repl = item[2][id]
     i+=1
-    puts("  Executing change #{i}")
+    puts("\n  Executing change #{i}")
     puts("  --------------------------------")
     puts("  Reading file #{file}")
-    puts("  Replacing regexp result of '#{regexp}' with '#{repl}'\n")
+    puts("  Replacing regexp result of '#{regexp}'(#{regexp.class}) with '#{repl}(#{repl.class}')\n")
     replace_line_in_file(file, regexp, repl)
   end
 else

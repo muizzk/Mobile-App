@@ -28,29 +28,62 @@ const styles = StyleSheet.create({
     itemView:{
         height: '77%'
     },
-    topBarButtonContainer: {
-        flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'center',
-        alignSelf: 'flex-end',
-        paddingHorizontal: 20,
-        paddingBottom: 5,
-
-        // width: 100,
-        // height: 70,
-        // backgroundColor: 'yellow'
-    },
     topBar: {
         flex: 0.13,
         flexDirection: 'row',
-        backgroundColor: '#DDD',
         justifyContent: 'space-between',        
+        alignItems: 'flex-end',
+        backgroundColor: '#DDD',
         width:'100%',
     },
+    bottomBar: {
+        flex: 0.1,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        backgroundColor: '#DDD',
+        width:'100%',
+    },
+    topBarButtonContainer: {
+        flexDirection: 'column',
+        alignItems: 'center',
+        paddingBottom: 5,
+        // width: 90,
+        // height: 70,
+        marginHorizontal: "5%",
+        // backgroundColor: 'green'
+    },
+    topBarButtonContainerSmall: {
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        paddingBottom: 10,
+        width: 50,
+        // backgroundColor: 'yellow'
+    },
+    bottomBarButtonContainer: {
+        flexDirection: 'column',
+        alignItems: 'center',
+        marginBottom: 15,
+        marginHorizontal: "5%",
+        // backgroundColor: 'green'
+    },
+    bottomBarButtonContainerSmall: {
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        paddingTop: 3,
+        marginBottom: 20,
+        width: 40,
+        // backgroundColor: 'yellow'
+    },
     buttonText: {
-        // marginLeft: 5,
-        // marginTop: 28,
         fontFamily: 'FuturaStd-Medium',
+        paddingTop: 5,
+    },
+    buttonTextSmall: {
+        fontFamily: 'FuturaStd-Medium',
+        fontSize: 11,
         paddingTop: 5
     },
     sectionView: {
