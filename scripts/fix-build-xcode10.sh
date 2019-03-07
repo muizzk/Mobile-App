@@ -2,9 +2,9 @@
 
 create_socket_patch() {
 # 	cat > $1 <<- EOF
-	echo """diff -x .DS_Store -ur a/RCTWebSocket.xcodeproj/project.pbxproj b/RCTWebSocket.xcodeproj/project.pbxproj
---- a/RCTWebSocket.xcodeproj/project.pbxproj	2019-01-07 09:14:32.000000000 +0200
-+++ b/RCTWebSocket.xcodeproj/project.pbxproj	2019-01-07 16:09:58.000000000 +0200
+	echo """diff -x .DS_Store -ur a/node_modules/react-native/Libraries/WebSocket/RCTWebSocket.xcodeproj/project.pbxproj b/node_modules/react-native/Libraries/WebSocket/RCTWebSocket.xcodeproj/project.pbxproj
+--- a/node_modules/react-native/Libraries/WebSocket/RCTWebSocket.xcodeproj/project.pbxproj	2018-05-09 00:21:09.000000000 +0300
++++ b/node_modules/react-native/Libraries/WebSocket/RCTWebSocket.xcodeproj/project.pbxproj	2019-03-05 11:55:03.000000000 +0200
 @@ -9,7 +9,6 @@
  /* Begin PBXBuildFile section */
  		1338BBE01B04ACC80064A9C9 /* RCTSRWebSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 1338BBDD1B04ACC80064A9C9 /* RCTSRWebSocket.m */; };
@@ -17,7 +17,7 @@ create_socket_patch() {
  		3DBE0D151F3B185A0099AA32 /* fishhook.c in Sources */ = {isa = PBXBuildFile; fileRef = 3DBE0D121F3B185A0099AA32 /* fishhook.c */; };
  		3DBE0D801F3B1AF00099AA32 /* fishhook.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3DBE0D131F3B185A0099AA32 /* fishhook.h */; };
  		3DBE0D821F3B1B0C0099AA32 /* fishhook.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3DBE0D131F3B185A0099AA32 /* fishhook.h */; };
-+		5ACD33FA21E3953600AFADFC /* libfishhook.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3DBE0D001F3B181A0099AA32 /* libfishhook.a */; };
++		5A3D4FB5222E7EF700EA9024 /* libfishhook.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3DBE0D001F3B181A0099AA32 /* libfishhook.a */; };
  		A12E9E2E1E5DEC4E0029001B /* RCTReconnectingWebSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = A12E9E2D1E5DEC4E0029001B /* RCTReconnectingWebSocket.m */; };
  		A12E9E2F1E5DEC550029001B /* RCTReconnectingWebSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = A12E9E2D1E5DEC4E0029001B /* RCTReconnectingWebSocket.m */; };
  /* End PBXBuildFile section */
@@ -26,7 +26,7 @@ create_socket_patch() {
  			buildActionMask = 2147483647;
  			files = (
 -				13526A521F362F7F0008EF00 /* libfishhook.a in Frameworks */,
-+				5ACD33FA21E3953600AFADFC /* libfishhook.a in Frameworks */,
++				5A3D4FB5222E7EF700EA9024 /* libfishhook.a in Frameworks */,
  			);
  			runOnlyForDeploymentPostprocessing = 0;
  		};
@@ -39,18 +39,7 @@ create_socket_patch() {
  					\"\$(inherited)\",
  				);
  				GCC_TREAT_WARNINGS_AS_ERRORS = NO;
-diff -x .DS_Store -ur a/RCTWebSocket.xcodeproj/xcuserdata/alexk.xcuserdatad/xcschemes/xcschememanagement.plist b/RCTWebSocket.xcodeproj/xcuserdata/alexk.xcuserdatad/xcschemes/xcschememanagement.plist
---- a/RCTWebSocket.xcodeproj/xcuserdata/alexk.xcuserdatad/xcschemes/xcschememanagement.plist	2019-01-07 13:23:28.000000000 +0200
-+++ b/RCTWebSocket.xcodeproj/xcuserdata/alexk.xcuserdatad/xcschemes/xcschememanagement.plist	2019-01-07 16:02:57.000000000 +0200
-@@ -22,7 +22,7 @@
- 		<key>fishhook.xcscheme_^#shared#^_</key>
- 		<dict>
- 			<key>orderHint</key>
--			<integer>57</integer>
-+			<integer>37</integer>
- 		</dict>
- 	</dict>
- </dict>""" > $1
+""" > $1
 }
 
 fix_glog() {
@@ -81,9 +70,10 @@ fix_websocket()  {
 
 	#cd node_modules/react-native/Libraries/WebSocket
 	pfile="patch-socket.diff"
-	create_socket_patch "$pfile"
-	exit 0
-	patch-apply.sh  "$$pfile"
+	destfile="node_modules/react-native/Libraries/WebSocket/RCTWebSocket.xcodeproj/project.pbxproj"
+	create_socket_patch "$pfile"	
+	patch-apply.sh "$pfile"
+	ls -l "$destfile"
 	echo; 
 	echo "========================================================================="
 	echo "Done. (Patching React/Libraries/WebSocket for 'libfishhook.a' issue)"; 
