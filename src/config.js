@@ -19,7 +19,7 @@ const LT_LOCAL      = "LOCAL";
 // ----------------------------
 //       CHOOSE CONFIG
 // ----------------------------
-const LT_CFG = LT_STAGING;
+export const LT_CFG = LT_STAGING;
 
 
 switch (LT_CFG) {
