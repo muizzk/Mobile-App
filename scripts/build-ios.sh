@@ -17,6 +17,7 @@ xcodebuild \
     -configuration Release \
     -sdk iphonesimulator \
     -derivedDataPath ios/build \
+    -UseModernBuildSystem=NO \
     -quiet
 
 # zip

@@ -32,7 +32,7 @@ native_cfg = ['src/version.js',
 
 # help case
 if (ARGV.count == 0 \
-			|| ['-h','-help','--help','help','?','/?'].index(ARGV[0]) > -1
+			|| ['-h','-help','--help','help','?','/?'].index(ARGV[0]) != nil
 )
 	puts("\n")
 	puts("Usage:\n\tselect_config.rb  prod|staging|dev|local  native|web")
