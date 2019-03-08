@@ -1,9 +1,15 @@
 #!/bin/bash
 
 # variables
-cfg="$1"
-out_dir="$2"
-zip_name="$3"
+[ $# -gt 0 ] \
+    && cfg="$1" \
+    || cfg="staging"
+[ $# -gt 1 ] \
+    && out_dir="$2" \
+    || out_dir=""
+[ $# -gt 2 ] \
+    && zip_name="$3" \
+    || zip_name=""
 app_name="MobileApp.app"
 
 
@@ -21,6 +27,8 @@ xcodebuild \
     -quiet
 
 # zip
-cd $out_dir
-zip -qr $zip_name $app_name
-mv $zip_name $TRAVIS_BUILD_DIR/
+if [ -n "$zip_name" ]; then
+    cd $out_dir
+    zip -qr $zip_name $app_name
+    mv $zip_name $TRAVIS_BUILD_DIR/
+fi
