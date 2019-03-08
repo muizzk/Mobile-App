@@ -4,7 +4,9 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         flexDirection: 'column',
-        alignItems: 'stretch',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        width:'100%',
         backgroundColor: '#f0f1f3'
     },
     searchAreaView: {
@@ -15,11 +17,74 @@ const styles = StyleSheet.create({
         paddingLeft: 17,
         paddingRight: 17
     },
+    content: {
+        flex: 0.87,
+        flexDirection: 'column',
+        width: "100%"
+    },
     webView: {
         marginTop: 10
     },
     itemView:{
         height: '77%'
+    },
+    topBar: {
+        flex: 0.13,
+        flexDirection: 'row',
+        justifyContent: 'space-between',        
+        alignItems: 'flex-end',
+        backgroundColor: '#DDD',
+        width:'100%',
+    },
+    bottomBar: {
+        flex: 0.1,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        backgroundColor: '#DDD',
+        width:'100%',
+    },
+    topBarButtonContainer: {
+        flexDirection: 'column',
+        alignItems: 'center',
+        paddingBottom: 5,
+        // width: 90,
+        // height: 70,
+        marginHorizontal: "5%",
+        // backgroundColor: 'green'
+    },
+    topBarButtonContainerSmall: {
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        paddingBottom: 10,
+        width: 50,
+        // backgroundColor: 'yellow'
+    },
+    bottomBarButtonContainer: {
+        flexDirection: 'column',
+        alignItems: 'center',
+        marginBottom: 15,
+        marginHorizontal: "5%",
+        // backgroundColor: 'green'
+    },
+    bottomBarButtonContainerSmall: {
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        paddingTop: 3,
+        marginBottom: 20,
+        width: 40,
+        // backgroundColor: 'yellow'
+    },
+    buttonText: {
+        fontFamily: 'FuturaStd-Medium',
+        paddingTop: 5,
+    },
+    buttonTextSmall: {
+        fontFamily: 'FuturaStd-Medium',
+        fontSize: 11,
+        paddingTop: 5
     },
     sectionView: {
         width: '100%',
@@ -308,11 +373,6 @@ const styles = StyleSheet.create({
         marginLeft: 15,
         flexDirection: 'row',
         alignItems: 'center',
-    },
-    btn_backText: {
-        marginLeft: 5,
-        marginTop: 28,
-        fontFamily: 'FuturaStd-Medium',
     },
     btn_backImage:{
         height: 24,
