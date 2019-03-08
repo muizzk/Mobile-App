@@ -7,8 +7,7 @@ import {
 import PropTypes from 'prop-types';
 
 import styles from './styles'
-import version, {debugVersion} from '../../../version'
-import productVersion from '../../../version';
+import productVersion, {debugVersion} from '../../../version';
 
 class VersionText extends PureComponent {
     static propTypes = {

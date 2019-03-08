@@ -1,4 +1,4 @@
-import LT_CFG from './config'
+import {LT_CFG} from './config'
 
 const productVersion = require("../package.json").version;
 const exploreIsNative = true;   // false: webview version, true: native search version
