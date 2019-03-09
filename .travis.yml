@@ -114,10 +114,10 @@ jobs:
         - nvm install 8.14.1
         - npm install
       script:
-        - echo yes | ./scripts/travis_build-android.sh prod $apk_prod
+        - ./scripts/travis_build-android.sh prod $apk_prod
         - git diff > anrdoid_prod.diff
         - scp -o "StrictHostKeyChecking no" anrdoid_prod.diff "$var_799cfba7:$dir2/"
-        - echo yes | ./scripts/travis_build-android.sh staging $apk_staging
+        - ./scripts/travis_build-android.sh staging $apk_staging
         - git diff > anrdoid_staging.diff
         - scp -o "StrictHostKeyChecking no" anrdoid_staging.diff "$var_799cfba7:$dir2/"
       after_success:
@@ -194,4 +194,4 @@ jobs:
         - nvm install 8.14.1
         - npm install
       script:
-        - echo yes | ./scripts/travis_build-android.sh prod $apk_prod
+        - ./scripts/travis_build-android.sh prod $apk_prod
